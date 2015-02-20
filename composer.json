@@ -1,0 +1,21 @@
+{
+  "name": "badphp/mysqli_interpolate",
+  "type": "library",
+  "description": "how mysqli_prepare should work",
+  "keywords": ["mysqli", "prepared statements", "badphp"],
+  "homepage": "https://github.com/badphp/mysqli_interpolate",
+  "license": "MIT",
+  "authors": [{
+    "name": "Jesus A. Domingo",
+    "role": "Developer",
+    "homepage": "http://github.com/noodlehaus"
+  }],
+  "require": {
+    "php": ">= 5.4.0"
+  },
+  "autoload": {
+    "files": [
+      "mysqli_interpolate.php"
+    ]
+  }
+}
