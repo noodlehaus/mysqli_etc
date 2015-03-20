@@ -1,50 +1,48 @@
 <?php
-# Convenience function for interpolating variables
-# into mysql statements and creating a prepared statement
-# out of it.
-#
-# @author Jesus A. Domingo
-# @email jesus.domingo@gmail.com
+/**
+ * mysqli_interpolate() is like sprintf() for mysql
+ * prepared statements.
+ *
+ * @author Jesus A. Domingo <jesus.domingo@gmail.com>
+ * @license MIT <http://noodlehaus.mit-license.org>
+ */
 
-# expect at least the db and query
+/**
+ * Create a prepared statement by interpolating values
+ * into the statement.
+ *
+ * @param resource $db  The mysqli connection
+ * @param string   $sql The sql statement to prepare
+ * @param mixed    ...  The parameter values
+ *
+ * @return mysqli_stmt The prepared statement
+ */
 function mysqli_interpolate($db, $sql) {
 
+  // require db and query, then get possible args
   $args = array_slice(func_get_args(), 2);
+  $argn = count($args);
 
-  $args_remaining = count($args);
-  $args_expected = substr_count($sql, '?');
+  // prepare before the bind
+  $stmt = mysqli_prepare($db, $sql);
 
-  if ($args_remaining < $args_expected) {
-    trigger_error(
-      "Not enough query arguments. ".
-      "Expected {$param_count}, received {$args_remaining}.",
-      E_USER_ERROR
-    );
+  if ($stmt === false) {
+    return false;
   }
 
-  $statement = mysqli_prepare($db, $sql);
+  // if we have args, then we need to interpolate
+  if ($argn) {
 
-  if ($statement === false) {
-    trigger_error(
-      mysqli_error($db),
-      E_USER_ERROR
-    );
-  }
-
-  # we have placeholders, try to interpolate
-  if ($args_expected > 0) {
-
-    $types = implode('', array_pad([], $args_expected, 's'));
-    $references = [];
+    $syms = implode('', array_pad([], $argn, 's'));
+    $refs = [];
 
     foreach ($args as $key => $val) {
-      $references[$key] = &$args[$key];
+      $refs[$key] = &$args[$key];
     }
 
-    array_unshift($references, $statement, $types);
-    call_user_func_array('mysqli_stmt_bind_param', $references);
+    array_unshift($refs, $stmt, $syms);
+    call_user_func_array('mysqli_stmt_bind_param', $refs);
   }
 
-  mysqli_stmt_execute($statement);
-  return $statement;
+  return $stmt;
 }
