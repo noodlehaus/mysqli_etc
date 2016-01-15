@@ -17,20 +17,15 @@
  *
  * @return mysqli_stmt The prepared statement
  */
-function mysqli_interpolate($db, $sql) {
+function mysqli_interpolate($db, $sql, ...$args) {
 
-  // require db and query, then get possible args
-  $args = array_slice(func_get_args(), 2);
   $argn = count($args);
-
-  // prepare before the bind
   $stmt = mysqli_prepare($db, $sql);
 
   if ($stmt === false) {
-    return false;
+    throw new mysqli_sql_exception(mysqli_error($db), mysqli_errno($db));
   }
 
-  // if we have args, then we need to interpolate
   if ($argn) {
 
     $syms = implode('', array_pad([], $argn, 's'));
@@ -41,7 +36,13 @@ function mysqli_interpolate($db, $sql) {
     }
 
     array_unshift($refs, $stmt, $syms);
-    call_user_func_array('mysqli_stmt_bind_param', $refs);
+
+    if (false === call_user_func_array('mysqli_stmt_bind_param', $refs)) {
+      throw new mysqli_sql_exception(
+        mysqli_stmt_error($stmt),
+        mysqli_stmt_errno($stmt)
+      );
+    }
   }
 
   return $stmt;
