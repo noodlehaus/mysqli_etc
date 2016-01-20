@@ -1,9 +1,9 @@
 {
-  "name": "badphp/mysqli_interpolate",
+  "name": "badphp/mysqli_etc",
   "type": "library",
   "description": "how mysqli_prepare should work",
   "keywords": ["mysqli", "prepared statements", "badphp"],
-  "homepage": "https://github.com/badphp/mysqli_interpolate",
+  "homepage": "https://github.com/badphp/mysqli_etc",
   "license": "MIT",
   "authors": [{
     "name": "Jesus A. Domingo",
@@ -16,7 +16,7 @@
   },
   "autoload": {
     "files": [
-      "mysqli_interpolate.php"
+      "mysqli_etc.php"
     ]
   }
 }
