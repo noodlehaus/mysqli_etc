@@ -104,9 +104,7 @@ function mysqli_interpolate($db, $sql, ...$args) {
       $refs[$key] = &$args[$key];
     }
 
-    array_unshift($refs, $stmt, $syms);
-
-    if (false === call_user_func_array('mysqli_stmt_bind_param', $refs)) {
+    if (false === mysqli_stmt_bind_param($stmt, $syms, ...$refs)) {
       throw new mysqli_sql_exception(
         mysqli_stmt_error($stmt),
         mysqli_stmt_errno($stmt)
