@@ -1,6 +1,6 @@
 # mysqli_etc
 
-Cruddy functions under the `mysqli` pseudo-namespace.
+Cruddy functions under the `mysqli` pseudo-namespace. Requires PHP 7.0+
 
 ## License
 
