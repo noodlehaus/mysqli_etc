@@ -70,15 +70,8 @@ function mysqli_interpolate($db, string $sql, ...$args): mysqli_stmt {
   }
 
   if ($argn) {
-
-    $syms = implode('', array_pad([], $argn, 's'));
-    $refs = [];
-
-    foreach ($args as $key => $val) {
-      $refs[$key] = &$args[$key];
-    }
-
-    if (false === mysqli_stmt_bind_param($stmt, $syms, ...$refs)) {
+    $syms = str_repeat('s', $argn);
+    if (false === mysqli_stmt_bind_param($stmt, $syms, ...$args)) {
       throw new mysqli_sql_exception(
         mysqli_stmt_error($stmt),
         mysqli_stmt_errno($stmt)
