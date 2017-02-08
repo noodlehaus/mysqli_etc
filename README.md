@@ -1,6 +1,6 @@
 # mysqli_etc
 
-Cruddy functions under the `mysqli` pseudo-namespace. Requires PHP 7.0+
+Cruddy functions under the `mysqli` pseudo-namespace. Requires PHP 7.1+
 
 ```php
 $connection = mysqli_connect($host, $username, $password, $database);
