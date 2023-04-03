@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 # Executes an insert and returns the insert id if any.
-function mysqli_insert($db, string $sql, ...$params) {
+function mysqli_insert($db, string $sql, mixed ...$params): string {
 
   $stmt = mysqli_interpolate($db, $sql, ...$params);
 
@@ -19,7 +19,7 @@ function mysqli_insert($db, string $sql, ...$params) {
 }
 
 # Executes a select and returns all resulting rows
-function mysqli_select($db, string $sql, ...$params) {
+function mysqli_select($db, string $sql, mixed ...$params): int {
 
   $stmt = mysqli_interpolate($db, $sql, ...$params);
 
@@ -42,13 +42,13 @@ function mysqli_select($db, string $sql, ...$params) {
 }
 
 # Executes a select and returns a single row.
-function mysqli_select_one($db, string $sql, ...$params) {
+function mysqli_select_one($db, string $sql, mixed ...$params): int {
   $rows = mysqli_select($db, $sql, ...$params);
   return empty($rows) ? $rows : $rows[0];
 }
 
 # Executes an update/delete query and returns affected row count.
-function mysqli_update($db, string $sql, ...$params) {
+function mysqli_update($db, string $sql, mixed ...$params): int {
 
   $stmt = mysqli_interpolate($db, $sql, ...$params);
 
@@ -66,7 +66,7 @@ function mysqli_update($db, string $sql, ...$params) {
 }
 
 # Expansion of mysqli_prepare
-function mysqli_interpolate($db, string $sql, ...$args) {
+function mysqli_interpolate($db, string $sql, mixed ...$args): string {
 
   $argn = count($args);
   $stmt = mysqli_prepare($db, $sql);
